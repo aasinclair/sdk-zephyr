@@ -51,6 +51,7 @@ struct ina230_config {
 	uint16_t config;
 	uint32_t current_lsb;
 	uint16_t rshunt;
+	uint32_t voltage_lsb;
 #ifdef CONFIG_INA230_TRIGGER
 	bool trig_enabled;
 	uint16_t mask;

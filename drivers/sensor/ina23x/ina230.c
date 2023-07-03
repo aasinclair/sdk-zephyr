@@ -18,9 +18,6 @@ LOG_MODULE_REGISTER(INA230, CONFIG_SENSOR_LOG_LEVEL);
 /** @brief Calibration scaling value (value scaled by 100000) */
 #define INA230_CAL_SCALING 512U
 
-/** @brief The LSB value for the bus voltage register, in microvolts/LSB. */
-#define INA230_BUS_VOLTAGE_UV_LSB 1250U
-
 /** @brief The scaling for the power register. */
 #define INA230_POWER_SCALING 25
 
@@ -35,7 +32,7 @@ static int ina230_channel_get(const struct device *dev,
 
 	switch (chan) {
 	case SENSOR_CHAN_VOLTAGE:
-		bus_uv = data->bus_voltage * INA230_BUS_VOLTAGE_UV_LSB;
+		bus_uv = data->bus_voltage * config->voltage_lsb;
 
 		/* convert to fractional volts (units for voltage channel) */
 		val->val1 = bus_uv / 1000000U;
@@ -277,6 +274,7 @@ static const struct sensor_driver_api ina230_driver_api = {
 		.config = DT_INST_PROP(inst, config),		    \
 		.current_lsb = DT_INST_PROP(inst, current_lsb_microamps),\
 		.rshunt = DT_INST_PROP(inst, rshunt_milliohms),	    \
+		.voltage_lsb = DT_INST_PROP(inst, voltage_lsb_microvolts),\
 		COND_CODE_1(DT_INST_NODE_HAS_PROP(inst, alert_gpios),\
 			    (INA230_CFG_IRQ(inst)), ())		    \
 	};							    \

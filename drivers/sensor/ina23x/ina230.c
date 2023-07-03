@@ -41,7 +41,7 @@ static int ina230_channel_get(const struct device *dev,
 
 	case SENSOR_CHAN_CURRENT:
 		if (data->current & INA23X_CURRENT_SIGN_BIT) {
-			current_ua = ~data->current + 1U;
+			current_ua = (uint16_t)~data->current + 1U;
 			sign = -1;
 		} else {
 			current_ua = data->current;
